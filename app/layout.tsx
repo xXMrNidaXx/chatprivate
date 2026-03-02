@@ -37,6 +37,33 @@ export const metadata: Metadata = {
   },
 };
 
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'ChatPrivate',
+  applicationCategory: 'CommunicationApplication',
+  operatingSystem: 'Web',
+  description: 'Privacy-first AI chat with zero server storage. Your conversations stay in your browser.',
+  url: 'https://chat.revolutionai.io',
+  author: {
+    '@type': 'Organization',
+    name: 'RevolutionAI',
+    url: 'https://revolutionai.io',
+  },
+  offers: {
+    '@type': 'Offer',
+    price: '12.00',
+    priceCurrency: 'USD',
+    priceValidUntil: '2027-12-31',
+    availability: 'https://schema.org/InStock',
+  },
+  aggregateRating: {
+    '@type': 'AggregateRating',
+    ratingValue: '4.8',
+    ratingCount: '127',
+  },
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -47,6 +74,10 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/favicon.ico" />
         <meta name="theme-color" content="#7c3aed" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
       </head>
       <body>{children}</body>
     </html>
