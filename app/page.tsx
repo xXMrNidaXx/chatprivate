@@ -13,11 +13,17 @@ interface Message {
   model?: string;
 }
 
-const MODELS = [
-  { id: 'gemma3:4b', name: '⚡ Fast', description: 'Quick responses' },
-  { id: 'qwen3:8b', name: '🧠 Smart', description: 'Best balance' },
-  { id: 'qwen3-coder:30b', name: '💻 Coder', description: 'Code expert' },
+const FREE_MODELS = [
+  { id: 'gemma3:4b', name: '⚡ Fast', description: 'Quick responses', pro: false },
+  { id: 'qwen3:8b', name: '🧠 Smart', description: 'Best balance', pro: false },
 ];
+
+const PRO_MODELS = [
+  { id: 'qwen3-coder:30b', name: '💻 Coder Pro', description: '30B code expert', pro: true },
+  { id: 'qwen2.5:latest', name: '🚀 Qwen 2.5', description: 'Latest & greatest', pro: true },
+];
+
+const ALL_MODELS = [...FREE_MODELS, ...PRO_MODELS];
 
 const SAMPLE_PROMPTS = [
   "Explain quantum computing like I'm 10",
@@ -271,8 +277,8 @@ export default function Home() {
               <p className="text-4xl font-bold text-white mb-4">$0</p>
               <ul className="text-gray-300 space-y-2 mb-6">
                 <li>10 messages/day</li>
-                <li>3 AI models</li>
-                <li>Browser storage</li>
+                <li>2 AI models (Fast + Smart)</li>
+                <li>🔒 Full privacy</li>
               </ul>
               <button onClick={() => setShowChat(true)} className="w-full bg-white/10 hover:bg-white/20 text-white py-3 rounded-lg font-semibold">Start Free</button>
             </div>
@@ -282,8 +288,9 @@ export default function Home() {
               <p className="text-4xl font-bold text-white mb-4">$12<span className="text-lg text-gray-400">/mo</span></p>
               <ul className="text-gray-300 space-y-2 mb-6">
                 <li><strong className="text-white">Unlimited</strong> messages</li>
-                <li>All AI models</li>
-                <li>Priority speed</li>
+                <li>👑 <strong className="text-white">Pro models</strong> (30B Coder)</li>
+                <li>⚡ Priority speed</li>
+                <li>📧 Priority support</li>
               </ul>
               <a href="https://buy.stripe.com/bJe4gs2hP8O86Pi1l6eQM02" className="block w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-lg font-semibold">Go Unlimited</a>
             </div>
@@ -347,7 +354,7 @@ export default function Home() {
             )}
             <button onClick={clearChat} className="text-gray-400 hover:text-white text-sm">← Home</button>
             <select value={model} onChange={(e) => setModel(e.target.value)} className="bg-white/10 text-white px-3 py-2 rounded-lg border border-white/20 text-sm">
-              {MODELS.map(m => (<option key={m.id} value={m.id} className="bg-slate-800">{m.name}</option>))}
+              {ALL_MODELS.map(m => (<option key={m.id} value={m.id} disabled={m.pro && !user} className="bg-slate-800">{m.name}{m.pro ? ' 👑' : ''}</option>))}
             </select>
           </div>
         </div>
