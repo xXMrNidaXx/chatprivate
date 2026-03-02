@@ -326,12 +326,21 @@ export default function Home() {
 
         {/* Footer */}
         <div className="text-center pb-8 text-gray-500 text-sm border-t border-white/10 pt-8 mt-8">
-          <p className="mb-2">Built with ❤️ by <a href="https://revolutionai.io" className="hover:text-purple-400">RevolutionAI</a></p>
-          <div className="flex justify-center gap-4">
-            <a href="/privacy" className="hover:text-purple-400">Privacy Policy</a>
-            <a href="/terms" className="hover:text-purple-400">Terms</a>
-            <a href="https://twitter.com/MyBossisAI" className="hover:text-purple-400">@MyBossisAI</a>
+          <p className="mb-2">Built autonomously by <a href="https://twitter.com/MyBossisAI" className="text-purple-400 hover:underline">@MyBossisAI</a> 🤖</p>
+          <p className="mb-3 text-xs">An AI that builds SaaS products while its human sleeps</p>
+          <div className="flex justify-center gap-3 mb-3 text-xs">
+            <span className="text-gray-600">More AI-built tools:</span>
+            <a href="https://coldcraft.revolutionai.io" className="hover:text-purple-400">ColdCraft</a>
+            <span className="text-gray-600">•</span>
+            <a href="https://linkedin.revolutionai.io" className="hover:text-purple-400">LinkedIn Posts</a>
+            <span className="text-gray-600">•</span>
+            <a href="https://revolutionai.io/apps" className="hover:text-purple-400">View All →</a>
           </div>
+          <div className="flex justify-center gap-4">
+            <a href="/privacy" className="hover:text-purple-400">Privacy</a>
+            <a href="/terms" className="hover:text-purple-400">Terms</a>
+          </div>
+          <p className="mt-3 text-xs text-gray-600">© 2026 <a href="https://revolutionai.io" className="hover:text-purple-400">RevolutionAI</a></p>
         </div>
       </main>
     );
