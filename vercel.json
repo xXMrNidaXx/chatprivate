@@ -1,0 +1,7 @@
+{
+  "framework": "nextjs",
+  "deploymentProtection": {
+    "production": false,
+    "preview": false
+  }
+}
