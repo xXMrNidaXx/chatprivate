@@ -5,6 +5,7 @@ import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { Auth } from '@supabase/auth-ui-react';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
 import type { User } from '@supabase/supabase-js';
+import { track, events } from '@/lib/track';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -84,10 +85,16 @@ export default function Home() {
       });
       setSubscribed(true);
       setEmail('');
+      track(events.SUBSCRIBE_EMAIL);
     } catch (e) {
       console.error('Subscribe error:', e);
     }
   };
+
+  // Track page view on mount
+  useEffect(() => {
+    track(events.PAGE_VIEW, { page: 'home' });
+  }, []);
 
   const sendMessage = async (text?: string) => {
     const messageText = text || input;
@@ -119,6 +126,7 @@ export default function Home() {
       const newCount = usage.count + 1;
       setUsage(prev => ({ ...prev, count: newCount }));
       localStorage.setItem('chatprivate_usage', JSON.stringify({ count: newCount, date: new Date().toDateString() }));
+      track(events.MESSAGE_SENT, { model, messageCount: newCount });
     } catch (error) {
       console.error('Chat error:', error);
     } finally {
@@ -197,7 +205,7 @@ export default function Home() {
             <button onClick={() => setShowChat(true)} className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-xl font-semibold text-lg transition">
               🚀 Try Free — 10 msgs/day
             </button>
-            <a href="https://buy.stripe.com/bJe4gs2hP8O86Pi1l6eQM02" className="bg-white/10 hover:bg-white/20 text-white px-8 py-4 rounded-xl font-semibold text-lg border border-white/20 transition">
+            <a href="https://buy.stripe.com/bJe4gs2hP8O86Pi1l6eQM02" onClick={() => track(events.UPGRADE_CLICK, { location: 'hero' })} className="bg-white/10 hover:bg-white/20 text-white px-8 py-4 rounded-xl font-semibold text-lg border border-white/20 transition">
               💳 Go Unlimited — $12/month
             </a>
           </div>
