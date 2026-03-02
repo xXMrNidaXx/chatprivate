@@ -167,8 +167,8 @@ export default function Home() {
             <Auth
               supabaseClient={supabase}
               appearance={{ theme: ThemeSupa, variables: { default: { colors: { brand: '#8b5cf6', brandAccent: '#7c3aed' } } } }}
-              providers={['google']}
-              redirectTo={typeof window !== 'undefined' ? window.location.origin : ''}
+              providers={[]}
+              redirectTo={process.env.NEXT_PUBLIC_SITE_URL || (typeof window !== 'undefined' ? window.location.origin : 'https://chat.revolutionai.io')}
               theme="dark"
             />
             <p className="text-center text-gray-400 text-sm mt-4">Sign in to track usage and upgrade to Pro</p>
