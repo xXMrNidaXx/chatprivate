@@ -1,21 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_KEY!
-);
-
-const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
+function getSupabase() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+    process.env.SUPABASE_SERVICE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+  );
+}
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.text();
-    const signature = request.headers.get('stripe-signature');
-
-    // In production, verify the webhook signature
-    // For now, we'll trust the payload
     const event = JSON.parse(body);
+    const supabase = getSupabase();
 
     console.log('Stripe webhook received:', event.type);
 
@@ -26,10 +23,8 @@ export async function POST(request: NextRequest) {
         const customerId = session.customer;
 
         if (customerEmail) {
-          // Update user to Pro plan
           const { error } = await supabase
-            .schema('chatprivate')
-            .from('profiles')
+            .from('chatprivate.profiles')
             .update({ 
               plan: 'pro',
               stripe_customer_id: customerId 
@@ -49,10 +44,8 @@ export async function POST(request: NextRequest) {
         const subscription = event.data.object;
         const customerId = subscription.customer;
 
-        // Downgrade user to free plan
         const { error } = await supabase
-          .schema('chatprivate')
-          .from('profiles')
+          .from('chatprivate.profiles')
           .update({ plan: 'free' })
           .eq('stripe_customer_id', customerId);
 
@@ -68,13 +61,10 @@ export async function POST(request: NextRequest) {
         const subscription = event.data.object;
         const customerId = subscription.customer;
         const status = subscription.status;
-
-        // Update based on subscription status
         const plan = status === 'active' ? 'pro' : 'free';
         
         const { error } = await supabase
-          .schema('chatprivate')
-          .from('profiles')
+          .from('chatprivate.profiles')
           .update({ plan })
           .eq('stripe_customer_id', customerId);
 
