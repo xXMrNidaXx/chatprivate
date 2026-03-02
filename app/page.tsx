@@ -35,6 +35,8 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [usage, setUsage] = useState({ count: 0, limit: 10 });
   const [showChat, setShowChat] = useState(false);
+  const [email, setEmail] = useState('');
+  const [subscribed, setSubscribed] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -70,6 +72,21 @@ export default function Home() {
   const signOut = async () => {
     await supabase.auth.signOut();
     setUser(null);
+  };
+
+  const subscribe = async () => {
+    if (!email || !email.includes('@')) return;
+    try {
+      await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      setSubscribed(true);
+      setEmail('');
+    } catch (e) {
+      console.error('Subscribe error:', e);
+    }
   };
 
   const sendMessage = async (text?: string) => {
@@ -262,6 +279,33 @@ export default function Home() {
               </ul>
               <a href="https://buy.stripe.com/bJe4gs2hP8O86Pi1l6eQM02" className="block w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-lg font-semibold">Go Unlimited</a>
             </div>
+          </div>
+        </div>
+
+        {/* Email Capture */}
+        <div className="max-w-xl mx-auto px-4 pb-12">
+          <div className="bg-white/5 border border-white/10 rounded-xl p-6 text-center">
+            <h3 className="text-xl font-bold text-white mb-2">🔔 Get Updates</h3>
+            <p className="text-gray-400 text-sm mb-4">New features, model updates, and privacy tips. No spam.</p>
+            {subscribed ? (
+              <p className="text-green-400">✅ You're subscribed!</p>
+            ) : (
+              <div className="flex gap-2 max-w-md mx-auto">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="your@email.com"
+                  className="flex-1 bg-white/10 text-white px-4 py-2 rounded-lg border border-white/20 focus:outline-none focus:border-purple-500"
+                />
+                <button
+                  onClick={subscribe}
+                  className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg font-semibold"
+                >
+                  Subscribe
+                </button>
+              </div>
+            )}
           </div>
         </div>
 
